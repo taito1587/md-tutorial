@@ -1,0 +1,29 @@
+# conda environment definition for AMBER MD Tutorial 0
+#
+# This file is consumed by micromamba (invoked from flake.nix's shellHook).
+# It declares which conda-forge packages we want installed into the
+# project-local env at ./.mamba-env/.
+#
+# To regenerate the env from scratch:
+#   rm -rf .mamba-env .mamba-root
+#   nix develop      # the shellHook will recreate the env
+
+name: amber-tutorial0
+
+channels:
+  - conda-forge
+
+dependencies:
+  # AmberTools — sander, pmemd, tleap, cpptraj, antechamber, parmed,
+  # process_mdout.perl, etc. The MD computational core.
+  - ambertools
+
+  # gnuplot — 2D plotting tool. Replacement for xmgrace, which is not
+  # available on conda-forge for osx-arm64 (the upstream Grace project
+  # is essentially unmaintained on macOS). gnuplot reads the same
+  # 2-column text format as xmgrace, so the workflow is unchanged.
+  - gnuplot
+
+  # perl — process_mdout.perl is a perl script. Usually pulled in by
+  # ambertools as a dep, but listed explicitly to be safe.
+  - perl
