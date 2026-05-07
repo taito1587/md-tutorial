@@ -1,0 +1,22 @@
+Energy minimization of solvated alanine dipeptide
+ &cntrl
+  ! ---- run type ----------------------------------------------------------
+  imin   = 1,        ! 1 = energy minimization (NOT MD). 0 would mean MD.
+  ntx    = 1,        ! 1 = read coordinates only from .rst7 (no velocities).
+  irest  = 0,        ! 0 = this is a fresh start (not a restart).
+
+  ! ---- minimization control ---------------------------------------------
+  maxcyc = 2000,     ! Total number of minimization cycles to run.
+  ncyc   = 1000,     ! For the first 1000 cycles use steepest descent
+                     ! (slow but robust at high-energy starting structures);
+                     ! after that switch to conjugate gradient (faster).
+
+  ! ---- output frequency --------------------------------------------------
+  ntpr   = 100,      ! Print energy summary every 100 cycles to .out file.
+  ntwx   = 0,        ! Do not write a trajectory (minimization only).
+
+  ! ---- nonbonded interactions -------------------------------------------
+  cut    = 8.0,      ! Cutoff (Å) for direct-space nonbonded interactions.
+                     ! Long-range electrostatics are handled by PME
+                     ! automatically because the system is periodic.
+ /

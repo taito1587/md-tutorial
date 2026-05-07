@@ -1,0 +1,56 @@
+Heating from 0 K to 300 K over 20 ps (NVT, Langevin)
+ &cntrl
+  ! ---- run type ----------------------------------------------------------
+  imin     = 0,        ! 0 = MD (not minimization).
+  ntx      = 1,        ! Read coordinates only (no velocities yet —
+                       ! we are starting from the minimized .ncrst).
+  irest    = 0,        ! Not a restart: assign fresh velocities at tempi.
+
+  ! ---- length and time step ---------------------------------------------
+  nstlim   = 10000,    ! Number of MD steps.
+                       ! 10000 steps × 0.002 ps/step = 20 ps total.
+  dt       = 0.002,    ! Time step in ps. 0.002 ps = 2 fs.
+                       ! 2 fs is safe only because we use SHAKE on bonds
+                       ! to hydrogen (see ntc/ntf below).
+
+  ! ---- bond constraints (SHAKE) -----------------------------------------
+  ntf      = 2,        ! Skip force calculation for bonds with H
+                       ! (they are constrained, so force isn't needed).
+  ntc      = 2,        ! Apply SHAKE to bonds involving hydrogen.
+                       ! These two together let us safely use 2 fs.
+
+  ! ---- temperature -------------------------------------------------------
+  tempi    = 0.0,      ! Initial temperature (K). Start "frozen".
+  temp0    = 300.0,    ! Target temperature (K). Body temperature-ish.
+  ntt      = 3,        ! Use Langevin thermostat (a stochastic friction
+                       ! that gently nudges atoms toward target T).
+  gamma_ln = 2.0,      ! Langevin collision frequency (ps^-1). 2.0 is a
+                       ! standard choice — large enough to thermostat,
+                       ! small enough not to over-damp the dynamics.
+
+  ! ---- box / pressure ----------------------------------------------------
+  ntb      = 1,        ! Periodic box, constant volume (NVT ensemble).
+                       ! We don't enable pressure scaling yet because the
+                       ! density would oscillate while heating.
+  ntp      = 0,        ! No pressure coupling.
+
+  ! ---- output ------------------------------------------------------------
+  ntpr     = 100,      ! Print energy summary every 100 steps (=0.2 ps).
+  ntwx     = 100,      ! Save trajectory frame every 100 steps.
+
+  ! ---- nonbonded --------------------------------------------------------
+  cut      = 8.0,      ! Direct-space cutoff (Å). PME handles long range.
+
+  ! ---- random seed -------------------------------------------------------
+  ig       = -1,       ! -1 = use a random random-seed (so two runs differ).
+
+  ! ---- temperature ramp via NMR-style restraints ------------------------
+  nmropt   = 1,        ! Enables the &wt blocks below, which we (ab)use
+                       ! to ramp temp0 from 0 K up to 300 K linearly.
+ /
+ ! Linearly ramp temp0 from 0 K (step 0) to 300 K (step 9000).
+ &wt type='TEMP0', istep1=0,    istep2=9000,  value1=0.0,   value2=300.0 /
+ ! Then hold at 300 K for the last 1000 steps so the system can equilibrate.
+ &wt type='TEMP0', istep1=9001, istep2=10000, value1=300.0, value2=300.0 /
+ ! Marker: end of the &wt block list.
+ &wt type='END' /

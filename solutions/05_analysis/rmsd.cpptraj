@@ -1,0 +1,44 @@
+# =============================================================================
+# cpptraj script: RMSD of alanine residue across heating + production runs
+# =============================================================================
+#
+# Run from workspace/05_analysis/ with:
+#   cpptraj -p ../01_setup/diala.parm7 -i rmsd.cpptraj &> cpptraj.log
+#
+# The topology (-p) is supplied on the command line, NOT inside this file.
+# (This is how the official tutorial does it. Either style is valid.)
+#
+# Output: 02_03.rms — two-column file: time (ps) vs mass-weighted RMSD (Å)
+# -----------------------------------------------------------------------------
+
+# Load the heating trajectory first, then append the production trajectory.
+# cpptraj treats the two as one continuous trajectory (heating frames first,
+# production frames after).
+trajin ../03_heating/02_Heat.nc
+trajin ../04_production/03_Prod.nc
+
+# Load the minimized structure as the RMSD reference frame.
+# We compare every frame against this "starting" structure to see how the
+# molecule deviates over time.
+reference ../02_minimization/01_Min.ncrst
+
+# Wrap molecules back into the primary unit cell. Without this, a molecule
+# that drifts across the periodic boundary looks like it teleported, which
+# would produce nonsense RMSD spikes. ALWAYS run autoimage on PBC trajectories
+# before structural analysis.
+autoimage
+
+# Compute root-mean-square deviation:
+#   reference          fit against the loaded reference (= 01_Min.ncrst)
+#   mass               mass-weighted RMSD (heavy atoms count more than H)
+#   out 02_03.rms      write a 2-column data file
+#   time 2.0           label the X axis as "time (ps), step 2.0 per frame"
+#                      (this is the tutorial's choice — it's a plotting
+#                      convention, not a physical claim about the saved frames)
+#   :2                 atom mask: residue 2 = ALA (the central alanine).
+#                      We focus on ALA because ACE / NME are flexible caps
+#                      and the interesting backbone (φ, ψ) lives on ALA.
+rms reference mass out 02_03.rms time 2.0 :2
+
+# Run all queued analyses.
+run

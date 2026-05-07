@@ -1,0 +1,57 @@
+Production MD at 300 K, NPT, 10 ns
+ &cntrl
+  ! ---- run type ----------------------------------------------------------
+  imin     = 0,        ! MD (not minimization).
+  ntx      = 5,        ! Read both coordinates AND velocities from the
+                       ! restart file. The heating step left us a .ncrst
+                       ! that already has equilibrated velocities at 300 K.
+  irest    = 1,        ! Restart: continue the time / step counter from
+                       ! the heating run, instead of resetting to 0.
+
+  ! ---- length and time step ---------------------------------------------
+  nstlim   = 5000000,  ! 5,000,000 steps × 0.002 ps/step = 10 ns total.
+                       ! Tip: drop to 500000 (= 1 ns) or even 50000
+                       ! (= 100 ps) when you just want to test the
+                       ! pipeline. Real research typically uses 100 ns+.
+  dt       = 0.002,    ! Integration time step in ps. 0.002 ps = 2 fs.
+                       ! 2 fs is safe only because SHAKE constrains
+                       ! the fastest vibrations (X-H bonds).
+
+  ! ---- bond constraints (SHAKE) -----------------------------------------
+  ntf      = 2,        ! Skip force calculation for bonds with H
+                       ! (they are constrained, so force isn't needed).
+  ntc      = 2,        ! Apply SHAKE to bonds involving hydrogen.
+
+  ! ---- temperature -------------------------------------------------------
+  temp0    = 300.0,    ! Target temperature (K).
+  ntt      = 3,        ! Langevin thermostat.
+  gamma_ln = 2.0,      ! Langevin collision frequency (ps^-1).
+
+  ! ---- pressure (NPT) ----------------------------------------------------
+  ntb      = 2,        ! Periodic box, constant pressure (NPT ensemble).
+  ntp      = 1,        ! Isotropic position scaling — the box can swell
+                       ! and shrink uniformly to maintain target pressure.
+                       ! Default target pressure is 1 atm.
+  barostat = 1,        ! 1 = Berendsen barostat (the original AMBER default,
+                       ! used by this tutorial). Modern AMBER also supports
+                       ! barostat=2 (Monte Carlo barostat), which gives
+                       ! correct fluctuations and is preferred for
+                       ! production research. We follow the tutorial here.
+
+  ! ---- output ------------------------------------------------------------
+  ! NOTE: the official tutorial deliberately sets ntpr/ntwx very low so
+  ! that learners can see lots of activity in the output. For real
+  ! research you would typically use ntpr=1000-5000, ntwx=5000-10000.
+  ntpr     = 100,      ! Print energy summary every 100 steps (= every 0.2 ps).
+  ntwx     = 100,      ! Save trajectory frame every 100 steps (= every 0.2 ps).
+                       ! With nstlim=5,000,000 this produces 50,000 frames
+                       ! and a sizeable .nc file — keep an eye on disk.
+
+  ! ---- nonbonded --------------------------------------------------------
+  cut      = 8.0,      ! Direct-space cutoff (Å). PME handles long range
+                       ! electrostatics automatically.
+
+  ! ---- random seed -------------------------------------------------------
+  ig       = -1,       ! -1 = use a random random-seed (so two independent
+                       ! runs produce different trajectories).
+ /

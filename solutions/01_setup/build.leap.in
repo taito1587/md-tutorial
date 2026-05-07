@@ -1,0 +1,43 @@
+# =============================================================================
+# tleap script: build alanine dipeptide (ACE-ALA-NME) and solvate in OPC water
+# =============================================================================
+#
+# tleap is AMBER's "molecule builder". It reads force field libraries, builds
+# molecules from sequences of residues, adds solvent / counter-ions, and writes
+# out the topology (.parm7) + coordinate (.rst7) files that sander/pmemd need.
+#
+# Run this with:
+#   tleap -f build.leap.in
+# Output files (created in the current directory):
+#   - diala.parm7   topology + force field parameters
+#   - diala.rst7    initial coordinates
+# -----------------------------------------------------------------------------
+
+# Load the protein force field. ff19SB is the modern recommended choice for
+# proteins in AMBER (released 2020, fits experimental backbone NMR data well).
+source leaprc.protein.ff19SB
+
+# Load the OPC water model. OPC is a 4-point water model that gives more
+# accurate liquid-water properties than older 3-point models like TIP3P.
+# (ff19SB was specifically parameterized to be used with OPC water.)
+source leaprc.water.opc
+
+# Build the molecule from a sequence of residue names:
+#   ACE = acetyl cap (CH3-CO-) on the N-terminus
+#   ALA = alanine
+#   NME = N-methyl cap (-NH-CH3) on the C-terminus
+# The N- and C-terminal caps stop the dipeptide from carrying a net charge,
+# which makes it a clean test system for force field studies.
+diala = sequence { ACE ALA NME }
+
+# Solvate the molecule inside a truncated octahedron of OPC water,
+# leaving at least 10 Å of water between the solute and the box edge.
+# Truncated octahedrons use less water than cubes for the same buffer
+# distance, so the simulation runs faster.
+solvateoct diala OPCBOX 10.0
+
+# Save the topology / parameter file (parm7) and the coordinate file (rst7).
+# These two together fully describe the system for sander/pmemd.
+saveamberparm diala diala.parm7 diala.rst7
+
+quit
