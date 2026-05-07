@@ -1,0 +1,18 @@
+# =============================================================================
+# cpptraj script: RMSD of DNA backbone — vacuum runs (12 Å vs no-cutoff)
+# =============================================================================
+# Run from workspace/05_analysis/ with:
+#   cpptraj -p ../01_setup/polyAT_vac.prmtop -i rmsd_vacuum.cpptraj
+# -----------------------------------------------------------------------------
+
+# Load both vacuum trajectories sequentially
+trajin ../02_vacuum_md/md_12Acut.nc
+rms first mass out vac_12Acut.rms @P,O3',O5',C3',C4',C5' time 0.1
+run
+
+clear trajin
+clear actions
+
+trajin ../02_vacuum_md/md_nocut.nc
+rms first mass out vac_nocut.rms @P,O3',O5',C3',C4',C5' time 0.1
+run

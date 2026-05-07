@@ -1,0 +1,37 @@
+// =============================================================================
+// NAB script: build a 10 bp poly(A)·poly(T) double-stranded DNA helix
+// =============================================================================
+//
+// NAB (Nucleic Acid Builder) is a small domain-specific language that ships
+// with AmberTools. It excels at generating idealized nucleic acid 3D
+// structures from sequence strings (something tleap cannot do directly).
+//
+// Workflow:
+//   1. Compile this .nab file into an executable:
+//        nab build.nab -o build_dna
+//   2. Run the executable to produce nuc.pdb:
+//        ./build_dna
+//
+// The resulting nuc.pdb contains both strands (poly-A + complementary poly-T)
+// with proper Watson-Crick base pairing in B-form geometry.
+// -----------------------------------------------------------------------------
+
+molecule m;
+
+// fd_helix("abdna", "aaaaaaaaaa", "dna") generates an Arnott B-form DNA helix
+// (the "abdna" tag) for the input single-strand sequence "aaaaaaaaaa".
+// The function automatically generates the Watson-Crick complement strand,
+// giving us a full duplex.
+//
+// Arguments:
+//   "abdna"        the helix type. "abdna" = Arnott B-form DNA (canonical B).
+//                  Other options: "arna" (A-form RNA), "lbdna" (left B-DNA),
+//                  "abrna" (A-B junction), etc.
+//   "aaaaaaaaaa"   the single-strand sequence (10 adenines here).
+//                  The complement (10 thymines) is auto-generated.
+//   "dna"          molecule type. "dna" or "rna".
+m = fd_helix( "abdna", "aaaaaaaaaa", "dna" );
+
+// putpdb writes the molecule to a PDB file.
+// The "-wwpdb" flag uses the modern PDB format (column-strict).
+putpdb( "nuc.pdb", m, "-wwpdb" );

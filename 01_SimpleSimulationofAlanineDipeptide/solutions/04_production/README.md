@@ -1,6 +1,6 @@
 # Step 04 — Production MD (本番シミュレーション)
 
-> このステップで必要な前知識: [PRIMER](../../PRIMER.md), Step 03 が完了していること
+> このステップで必要な前知識: [PRIMER](../../../PRIMER.md), Step 03 が完了していること
 
 ## このステップで何をやるか
 
@@ -329,10 +329,10 @@ grep "Density" 03_Prod.out | awk '{print NR, $3}' | head -20
 
 ## 12. 用語ミニ辞典 (このステップ初出)
 
-- **NPT アンサンブル**: 粒子数 N、圧力 P、温度 T を一定に保つ。詳細 [GLOSSARY § C](../../GLOSSARY.md#アンサンブル-ensemble)
-- **Berendsen barostat**: 体積を一律スケールする圧力制御。詳細 [GLOSSARY](../../GLOSSARY.md#バロスタット-barostat)
-- **pmemd**: AMBER の高速 MD エンジン。詳細 [GLOSSARY](../../GLOSSARY.md#pmemd)
-- **mdinfo**: MD 中の進捗情報ファイル。詳細 [GLOSSARY](../../GLOSSARY.md#mdinfo)
+- **NPT アンサンブル**: 粒子数 N、圧力 P、温度 T を一定に保つ。詳細 [GLOSSARY § C](../../../GLOSSARY.md#アンサンブル-ensemble)
+- **Berendsen barostat**: 体積を一律スケールする圧力制御。詳細 [GLOSSARY](../../../GLOSSARY.md#バロスタット-barostat)
+- **pmemd**: AMBER の高速 MD エンジン。詳細 [GLOSSARY](../../../GLOSSARY.md#pmemd)
+- **mdinfo**: MD 中の進捗情報ファイル。詳細 [GLOSSARY](../../../GLOSSARY.md#mdinfo)
 
 ---
 

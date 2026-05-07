@@ -1,0 +1,9 @@
+polyA-polyT 10-mer: initial minimization prior to vacuum MD
+ &cntrl
+  imin   = 1,        ! 1 = energy minimization
+  maxcyc = 500,      ! total cycles
+  ncyc   = 250,      ! steepest descent for first 250, conjugate gradient after
+  ntb    = 0,        ! 0 = NO periodic boundary (vacuum, no box)
+  igb    = 0,        ! 0 = NO implicit solvent (pure vacuum)
+  cut    = 12        ! 12 Å cutoff for nonbonded interactions
+ /

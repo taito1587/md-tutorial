@@ -1,0 +1,18 @@
+10-mer DNA MD in-vacuo, infinite cut off
+ &cntrl
+  imin     = 0,        ! MD
+  ntb      = 0,        ! No periodic boundary (vacuum)
+  igb      = 0,        ! No implicit solvent
+  ntpr     = 100,
+  ntwx     = 100,
+  ntt      = 3,        ! Langevin thermostat
+  gamma_ln = 1.0,
+  tempi    = 300.0,
+  temp0    = 300.0,
+  nstlim   = 100000,   ! 100 ps
+  dt       = 0.001,
+  cut      = 999       ! "Infinite" cutoff. With cut > size of system,
+                       ! every atom interacts with every other atom directly.
+                       ! Very accurate but O(N^2) — only feasible for small
+                       ! systems like this 10-bp DNA.
+ /

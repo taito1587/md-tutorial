@@ -1,0 +1,15 @@
+# =============================================================================
+# cpptraj script: RMSD of DNA backbone — GB run
+# =============================================================================
+# Run from workspace/05_analysis/ with:
+#   cpptraj -p ../01_setup/polyAT_vac.prmtop -i rmsd_gb.cpptraj
+# (Note: GB uses the vacuum prmtop — same atoms.)
+# -----------------------------------------------------------------------------
+
+trajin ../03_implicit_solvent/md.nc
+
+# Backbone atoms only: phosphate + sugar ring atoms.
+# `mass` = mass-weighted RMSD; `time 0.1` = 0.1 ps per frame label.
+rms first mass out gb.rms @P,O3',O5',C3',C4',C5' time 0.1
+
+run

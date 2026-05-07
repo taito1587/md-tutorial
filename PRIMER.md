@@ -1,13 +1,13 @@
-# MD シミュレーション入門 — このチュートリアルを始める前に
+# MD シミュレーション入門 — チュートリアルを始める前に
 
-このページは、AMBER チュートリアル 0 を進める前に読んでおくと**地に足がつく**ための「導入ガイド」です。前提知識ゼロを想定しています。専門用語は最低限に絞り、出てきたものは全部 [GLOSSARY](GLOSSARY.md) に詳しく書いてあります。
+このページは、本リポジトリの各章 (AMBER 公式チュートリアルに対応) を進める前に読んでおくと**地に足がつく**ための「導入ガイド」です。前提知識ゼロを想定しています。専門用語は最低限に絞り、出てきたものは全部 [GLOSSARY](GLOSSARY.md) に詳しく書いてあります。
 
 このページを読み終わると、以下が分かるようになります:
 
 - そもそも分子動力学 (MD) シミュレーションって何をしているのか
 - なぜそれをやる価値があるのか
 - AMBER は MD の中でどんな立ち位置のソフトなのか
-- このチュートリアル全体で**何が起きるか**の見通し
+- 各章 (アラニンジペプチド・DNA decamer・…) で**共通する流れ**は何か
 
 ---
 
@@ -131,44 +131,46 @@ E = (結合の伸縮)
 
 ---
 
-## 5. このチュートリアル全体の見通し
+## 5. MD の標準パイプライン (どの章でも共通)
 
-5 ステップで進みます。各ステップで「**何を入力に、何を出力するか**」だけ最初に押さえると迷子になりません。
+各章で扱う系 (アラニン、DNA、タンパク質、…) は違っても、**基本の 5 ステップは同じ**です。
+
+> 以下では章 01 (アラニンジペプチド) を例に具体的なファイル名を書いていますが、章 02 (DNA decamer) も同じ流れです (出てくる分子と力場が違うだけ)。
 
 ### Step 01 — System setup (`solutions/01_setup/`)
 
-**やること**: アラニンジペプチドを組み立てて、水で溶媒和する。
+**やること**: 分子を組み立てて、水で溶媒和する。
 **ツール**: `tleap`
-**入力**: なし (スクリプト `build.leap.in` 内ですべて指定)
-**出力**: `diala.parm7` (トポロジー), `diala.rst7` (初期座標)
+**入力**: なし (スクリプトファイル内ですべて指定)
+**出力**: `*.parm7` (トポロジー), `*.rst7` (初期座標)
 
 ### Step 02 — Energy minimization (`solutions/02_minimization/`)
 
 **やること**: 初期構造のひずみをエネルギー的に解消する。動かすわけではなく、座標を最適化するだけ。
 **ツール**: `sander`
-**入力**: `diala.parm7`, `diala.rst7`
+**入力**: `*.parm7`, `*.rst7`
 **出力**: `01_Min.ncrst` (最小化後の座標), `01_Min.out` (エネルギーログ)
 
 ### Step 03 — Heating (`solutions/03_heating/`)
 
-**やること**: 0 K から 300 K まで 20 ps かけてゆっくり加熱する MD。
+**やること**: 0 K から 300 K (など) まで数十 ps かけてゆっくり加熱する MD。
 **ツール**: `sander`
-**入力**: `diala.parm7`, `01_Min.ncrst`
+**入力**: `*.parm7`, `01_Min.ncrst`
 **出力**: `02_Heat.ncrst`, `02_Heat.nc` (トラジェクトリ), `02_Heat.out`
 
 ### Step 04 — Production MD (`solutions/04_production/`)
 
-**やること**: 300 K, 1 atm の条件下で 10 ns の本番 MD。
+**やること**: 目標条件 (例 300 K, 1 atm) で本番 MD。長さは題材次第 (1〜100+ ns)。
 **ツール**: `pmemd` (or `sander`)
-**入力**: `diala.parm7`, `02_Heat.ncrst`
+**入力**: `*.parm7`, `02_Heat.ncrst`
 **出力**: `03_Prod.ncrst`, `03_Prod.nc`, `03_Prod.out`
 
 ### Step 05 — Analysis (`solutions/05_analysis/`)
 
-**やること**: 温度・密度・RMSD をプロットしてシミュレーションが妥当か確認。
-**ツール**: `cpptraj`, `process_mdout.perl`, `gnuplot` (公式は xmgrace。本リポジトリは Apple Silicon 互換性で gnuplot を使用)
+**やること**: 温度・密度・RMSD などをプロットしてシミュレーションが妥当か確認。
+**ツール**: `cpptraj`, `process_mdout.perl`, `gnuplot` (公式は xmgrace だが本リポジトリは Apple Silicon 互換性で gnuplot を使用)
 **入力**: ステップ 03/04 の `.nc` と `.out`
-**出力**: `summary.TEMP`, `summary.DENSITY`, `02_03.rms` ほか
+**出力**: `summary.TEMP`, `summary.DENSITY`, `*.rms` ほか
 
 ### 図でまとめると
 
@@ -212,5 +214,5 @@ diala.rst7                                02_Heat.nc              03_Prod.nc    
 
 ## 次に読むべきもの
 
-→ [README.md](README.md) でセットアップ手順 (Nix インストール、`nix develop`) を確認
-→ そのあと [`workspace/README.md`](workspace/README.md) に従って 1 ステップずつ手を動かす
+→ [README.md](README.md) でセットアップ手順 (Nix インストール、`nix develop`) と章一覧を確認
+→ そのあと進めたい章 (例: [`01_SimpleSimulationofAlanineDipeptide/`](01_SimpleSimulationofAlanineDipeptide/)) の README に従って 1 ステップずつ手を動かす

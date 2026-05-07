@@ -1,0 +1,17 @@
+# =============================================================================
+# cpptraj script: RMSD of DNA backbone — explicit solvent run
+# =============================================================================
+# Run from workspace/05_analysis/ with:
+#   cpptraj -p ../01_setup/polyAT_wat.prmtop -i rmsd_explicit.cpptraj
+# -----------------------------------------------------------------------------
+
+trajin ../04_explicit_solvent/heat.nc
+trajin ../04_explicit_solvent/prod.nc
+
+# Wrap molecules back into the primary unit cell (PBC required).
+autoimage
+
+# Mass-weighted RMSD of DNA backbone atoms.
+rms first mass out explicit.rms @P,O3',O5',C3',C4',C5' time 0.2
+
+run

@@ -1,0 +1,25 @@
+Stage 3: heat the system from 0 K to 300 K (NVT, weak DNA restraint)
+ &cntrl
+  imin     = 0,        ! MD
+  irest    = 0,        ! Fresh start (assigning velocities for the first time)
+  ntx      = 1,        ! Read coordinates only
+  ntb      = 1,        ! Periodic, constant volume (NVT)
+  cut      = 10.0,
+  ntr      = 1,        ! Weak restraint on DNA during heating (helps stability)
+  ntc      = 2,        ! SHAKE on H-bonds
+  ntf      = 2,        ! Skip H-bond force calc
+  tempi    = 0.0,      ! Start frozen
+  temp0    = 300.0,    ! Heat to 300 K
+  ntt      = 3,        ! Langevin thermostat
+  gamma_ln = 1.0,
+  nstlim   = 10000,    ! 10000 × 0.002 ps = 20 ps
+  dt       = 0.002,
+  ntpr     = 100,
+  ntwx     = 100,
+  ntwr     = 1000,
+ /
+Keep DNA restrained during heating
+10.0
+RES 1 20
+END
+END

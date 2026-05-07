@@ -1,0 +1,12 @@
+polyA-polyT 10-mer: initial minimization prior to MD GB model
+ &cntrl
+  imin   = 1,        ! minimization
+  maxcyc = 500,
+  ncyc   = 250,
+  ntb    = 0,        ! No periodic boundary (GB doesn't use boxes)
+  igb    = 1,        ! 1 = Hawkins-Cramer-Truhlar GB model (the original
+                     ! pairwise GB). Other choices: igb=2 (OBC1), igb=5 (OBC2),
+                     ! igb=7 (GBn), igb=8 (GBn2). Higher numbers ≈ more
+                     ! accurate but slower. We follow the tutorial here.
+  cut    = 12        ! Nonbonded cutoff (Å)
+ /

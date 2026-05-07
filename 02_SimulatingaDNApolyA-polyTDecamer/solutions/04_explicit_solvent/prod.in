@@ -1,0 +1,26 @@
+Stage 4: production MD at 300 K, 1 atm (NPT, no restraints)
+ &cntrl
+  imin     = 0,        ! MD
+  irest    = 1,        ! Restart from heated state (velocities continued)
+  ntx      = 7,        ! Read coordinates + velocities + box
+                       ! (7 = with box info; for older formats use 5)
+  ntb      = 2,        ! Periodic, constant pressure (NPT)
+  ntp      = 1,        ! Isotropic pressure scaling
+  pres0    = 1.0,      ! Target pressure (atm)
+  taup     = 2.0,      ! Pressure relaxation time (ps)
+  cut      = 10.0,
+  ntr      = 0,        ! No restraints — fully free dynamics
+  ntc      = 2,        ! SHAKE
+  ntf      = 2,
+  tempi    = 300.0,
+  temp0    = 300.0,
+  ntt      = 3,        ! Langevin thermostat
+  gamma_ln = 1.0,
+  nstlim   = 50000,    ! 50000 × 0.002 ps = 100 ps total
+                       ! (tutorial-default short run; bump to 500000 = 1 ns
+                       !  or more for real research)
+  dt       = 0.002,
+  ntpr     = 100,
+  ntwx     = 100,
+  ntwr     = 1000,
+ /

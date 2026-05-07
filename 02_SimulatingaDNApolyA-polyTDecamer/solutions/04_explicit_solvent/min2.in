@@ -1,0 +1,9 @@
+Stage 2: full minimization (no restraints)
+ &cntrl
+  imin   = 1,        ! Minimization
+  maxcyc = 2500,     ! More cycles since we're now optimizing the DNA too
+  ncyc   = 1000,
+  ntb    = 1,
+  ntr    = 0,        ! NO restraints — let everything relax
+  cut    = 10.0
+ /

@@ -1,0 +1,15 @@
+Stage 1: minimize SOLVENT (water + ions) only, hold DNA fixed
+ &cntrl
+  imin   = 1,        ! Minimization
+  maxcyc = 1000,
+  ncyc   = 500,      ! Steepest descent for first 500 cycles
+  ntb    = 1,        ! Periodic, constant volume
+  ntr    = 1,        ! Enable positional restraints (defined in restraint
+                     ! mask + force constant below)
+  cut    = 10.0
+ /
+Hold the DNA fixed
+500.0
+RES 1 20
+END
+END

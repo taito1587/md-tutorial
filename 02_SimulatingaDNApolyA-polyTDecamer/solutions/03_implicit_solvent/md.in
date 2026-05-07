@@ -1,0 +1,18 @@
+10-mer DNA MD with GB implicit solvent, 12 Å cutoff
+ &cntrl
+  imin     = 0,        ! MD
+  ntb      = 0,        ! No periodic boundary
+  igb      = 1,        ! Use the same GB model as in min.in
+  ntpr     = 100,
+  ntwx     = 100,
+  ntt      = 3,        ! Langevin thermostat
+  gamma_ln = 1.0,
+  tempi    = 300.0,    ! Start at 300 K (no slow heating needed for GB
+                       ! systems either — there are no clashing solvent atoms)
+  temp0    = 300.0,
+  nstlim   = 100000,   ! 100 ps total (100,000 × 0.001)
+  dt       = 0.001,    ! 1 fs (no SHAKE)
+  cut      = 12.0      ! Cutoff. With GB the nonbonded sum is over all pairs
+                       ! within cut, but unlike vacuum MD the GB term itself
+                       ! captures the long-range polarization effect of water.
+ /

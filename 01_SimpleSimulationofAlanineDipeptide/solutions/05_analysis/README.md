@@ -1,6 +1,6 @@
 # Step 05 — Analysis (結果の分析と可視化)
 
-> このステップで必要な前知識: [PRIMER](../../PRIMER.md), Step 04 が完了していること
+> このステップで必要な前知識: [PRIMER](../../../PRIMER.md), Step 04 が完了していること
 
 ## このステップで何をやるか
 
@@ -337,10 +337,10 @@ vmd -parm7 ../01_setup/diala.parm7 -netcdf ../04_production/03_Prod.nc
 
 ## 10. 用語ミニ辞典 (このステップ初出)
 
-- **RMSD**: 参照からの位置ズレの平均的大きさ。詳細 [GLOSSARY](../../GLOSSARY.md#rmsd-root-mean-square-deviation)
-- **mass-weighted RMSD**: 質量で重みを付けた RMSD。詳細 [GLOSSARY](../../GLOSSARY.md#mass-weighted-rmsd)
-- **autoimage**: 周期境界をまたいだ分子を箱に巻き戻す。詳細 [GLOSSARY](../../GLOSSARY.md#autoimage)
-- **gnuplot**: 軽量プロットツール。`gnuplot -p -e 'plot "..." with lines'` で 1 行プロット。詳細 [GLOSSARY](../../GLOSSARY.md#gnuplot)
+- **RMSD**: 参照からの位置ズレの平均的大きさ。詳細 [GLOSSARY](../../../GLOSSARY.md#rmsd-root-mean-square-deviation)
+- **mass-weighted RMSD**: 質量で重みを付けた RMSD。詳細 [GLOSSARY](../../../GLOSSARY.md#mass-weighted-rmsd)
+- **autoimage**: 周期境界をまたいだ分子を箱に巻き戻す。詳細 [GLOSSARY](../../../GLOSSARY.md#autoimage)
+- **gnuplot**: 軽量プロットツール。`gnuplot -p -e 'plot "..." with lines'` で 1 行プロット。詳細 [GLOSSARY](../../../GLOSSARY.md#gnuplot)
 
 ---
 

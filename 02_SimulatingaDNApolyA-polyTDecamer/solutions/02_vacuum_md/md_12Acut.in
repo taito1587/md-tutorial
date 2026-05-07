@@ -1,0 +1,19 @@
+10-mer DNA MD in-vacuo, 12 angstrom cut off
+ &cntrl
+  imin     = 0,        ! MD (not minimization)
+  ntb      = 0,        ! No periodic boundary (vacuum)
+  igb      = 0,        ! No implicit solvent
+  ntpr     = 100,      ! Print to .out every 100 steps
+  ntwx     = 100,      ! Save trajectory frame every 100 steps
+  ntt      = 3,        ! Langevin thermostat
+  gamma_ln = 1.0,      ! Langevin collision frequency (ps^-1)
+  tempi    = 300.0,    ! Initial temperature (start at 300 K directly —
+                       ! vacuum systems don't need slow heating because
+                       ! there are no clashing solvent atoms)
+  temp0    = 300.0,    ! Target temperature
+  nstlim   = 100000,   ! 100,000 steps
+  dt       = 0.001,    ! 1 fs/step → 100 ps total. NOTE: shorter step than
+                       ! solvated MD because we're NOT using SHAKE here.
+  cut      = 12.0      ! Nonbonded cutoff: only count interactions within 12 Å.
+                       ! Much faster than infinite, but introduces approximation.
+ /

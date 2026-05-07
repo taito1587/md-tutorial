@@ -1,6 +1,6 @@
 # Step 03 — Heating (0 K → 300 K にゆっくり加熱)
 
-> このステップで必要な前知識: [PRIMER](../../PRIMER.md), Step 02 が完了していること
+> このステップで必要な前知識: [PRIMER](../../../PRIMER.md), Step 02 が完了していること
 
 ## このステップで何をやるか
 
@@ -351,10 +351,10 @@ grep "TIME(PS)" 02_Heat.out | awk '{print $4, $9}'
 
 ## 11. 用語ミニ辞典 (このステップ初出)
 
-- **NVT アンサンブル**: 粒子数 N、体積 V、温度 T を一定に保つ統計集団。詳細 [GLOSSARY § C](../../GLOSSARY.md#アンサンブル-ensemble)
-- **Langevin dynamics**: 摩擦 + ランダム力の方程式。詳細 [GLOSSARY](../../GLOSSARY.md#langevin-dynamics)
-- **SHAKE**: 結合長を固定するアルゴリズム。詳細 [GLOSSARY](../../GLOSSARY.md#shake)
-- **PME**: 周期境界下での長距離静電。詳細 [GLOSSARY](../../GLOSSARY.md#particle-mesh-ewald-pme)
+- **NVT アンサンブル**: 粒子数 N、体積 V、温度 T を一定に保つ統計集団。詳細 [GLOSSARY § C](../../../GLOSSARY.md#アンサンブル-ensemble)
+- **Langevin dynamics**: 摩擦 + ランダム力の方程式。詳細 [GLOSSARY](../../../GLOSSARY.md#langevin-dynamics)
+- **SHAKE**: 結合長を固定するアルゴリズム。詳細 [GLOSSARY](../../../GLOSSARY.md#shake)
+- **PME**: 周期境界下での長距離静電。詳細 [GLOSSARY](../../../GLOSSARY.md#particle-mesh-ewald-pme)
 
 ---
 

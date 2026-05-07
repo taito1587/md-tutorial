@@ -1,6 +1,6 @@
 # Step 02 — Energy minimization (エネルギー最小化)
 
-> このステップで必要な前知識: [PRIMER](../../PRIMER.md), Step 01 が完了していること
+> このステップで必要な前知識: [PRIMER](../../../PRIMER.md), Step 01 が完了していること
 
 ## このステップで何をやるか
 
@@ -19,7 +19,7 @@
 
 ### MD の文脈での「エネルギー」
 
-[力場](../../GLOSSARY.md#力場-force-field) の式で計算される **ポテンシャルエネルギー**:
+[力場](../../../GLOSSARY.md#力場-force-field) の式で計算される **ポテンシャルエネルギー**:
 
 ```
 E(r) = (結合の伸縮の歪み)
@@ -124,7 +124,7 @@ E(r) = (結合の伸縮の歪み)
 | `ncyc` | `1000` | この cycle までは steepest descent、超えたら conjugate gradient |
 | `ntpr` | `100` | 100 cycle ごとに `.out` にエネルギーを書く |
 | `ntwx` | `0` | 0 = トラジェクトリ (`.nc`) を書かない (最小化なので動きを記録する意味がない) |
-| `cut` | `8.0` | nonbonded カットオフ 8 Å (詳細は [GLOSSARY](../../GLOSSARY.md#カットオフ-cutoff)) |
+| `cut` | `8.0` | nonbonded カットオフ 8 Å (詳細は [GLOSSARY](../../../GLOSSARY.md#カットオフ-cutoff)) |
 
 ### Fortran namelist 形式って何?
 
@@ -301,7 +301,7 @@ grep -E "^ +[0-9]+ +-?[0-9]" 01_Min.out | head -20
 ## 9. 用語ミニ辞典 (このステップ初出)
 
 - **ポテンシャルエネルギー曲面 (PES)**: 全原子座標を入力すると 1 つの数値 (エネルギー) を返す関数。最小化はこの曲面を下る作業
-- **steepest descent / conjugate gradient**: 最小化アルゴリズム。詳細 [GLOSSARY § D](../../GLOSSARY.md#エネルギー最小化-energy-minimization)
+- **steepest descent / conjugate gradient**: 最小化アルゴリズム。詳細 [GLOSSARY § D](../../../GLOSSARY.md#エネルギー最小化-energy-minimization)
 - **RMS gradient**: 力 (= -dE/dr) のルート平均二乗。0 に近いほど平衡点
 - **EEL / VDWAALS**: 静電エネルギー / van der Waals エネルギーの内訳
 

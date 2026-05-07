@@ -8,7 +8,7 @@
 
 ## 前提
 
-ルートの [README](../README.md) に従って、すでに
+プロジェクトルートの [README](../../README.md) に従って、すでに
 
 1. Nix をインストール済み
 2. `nix develop` でシェルに入っている (プロンプト先頭で `sander -h` が通ること)
