@@ -12,7 +12,7 @@
 - `03_Prod.nc` — トラジェクトリ (50,000 フレーム ≒ 10 ns 分)
 - `03_Prod.out` — 全エネルギー・温度・圧力・密度のログ
 
-> ⚠️ **このステップが一番時間がかかります**。CPU シリアルだと公式は ~13 時間と言っています。学習用ならまず短縮版 (1 ns or 100 ps) で動作確認することを強く推奨します。
+> ⚠️ **このステップが一番時間がかかります**。本チュートリアルが使う `sander` (CPU シリアル) では、Apple Silicon ノート PC でも 10 ns に **十数時間〜半日** かかります。学習用ならまず短縮版 (1 ns or 100 ps) で動作確認することを強く推奨します。
 
 ---
 
@@ -167,6 +167,8 @@ nstlim × dt = 全シミュレーション時間
 
 ## 7. 実行してみる
 
+このチュートリアルでは **`sander`** (AmberTools 同梱の MD エンジン) を使います。Step 02 / Step 03 と同じです。
+
 ```bash
 cd workspace
 mkdir -p 04_production && cd 04_production
@@ -176,9 +178,7 @@ cp ../../solutions/04_production/03_Prod.in .
 # 動作確認なら nstlim を減らす (10 ns → 1 ns)
 # sed -i.bak 's/nstlim   = 5000000/nstlim   = 500000/' 03_Prod.in
 
-# pmemd は AmberTools にも入っている高速エンジン (CPU シリアル版)
-# GPU/MPI 並列の高速版は商用 AMBER のみ
-pmemd -O \
+sander -O \
     -i 03_Prod.in \
     -o 03_Prod.out \
     -p ../01_setup/diala.parm7 \
@@ -195,18 +195,20 @@ echo "Or:      cat 03_Prod.mdinfo  # current step + ETA"
 末尾の `&` でバックグラウンド実行になります。ターミナルを閉じても止まらないようにするには `nohup` をつけます:
 
 ```bash
-nohup pmemd -O ... &
+nohup sander -O ... &
 ```
 
-### `sander` で代用する場合
+### `pmemd` を使いたい場合 (上級者向け)
 
-`pmemd` がうまく動かない場合 (Nix で見つからない等) は、同じ入力ファイルで `sander` でも実行できます:
+商用 AMBER ライセンスを持っている場合は、同じ入力ファイルで `pmemd` を使うとシリアルで数倍、`pmemd.MPI` / `pmemd.cuda` ならさらに桁違いに高速化できます:
 
 ```bash
-sander -O -i 03_Prod.in ... &
+pmemd -O -i 03_Prod.in ... &       # シリアル
+pmemd.MPI -O -i 03_Prod.in ... &   # MPI 並列
+pmemd.cuda -O -i 03_Prod.in ... &  # GPU
 ```
 
-`sander` の方が遅いので、所要時間は数倍に延びます。
+ただし conda-forge の `ambertools` パッケージ (本リポジトリの Nix/mamba 環境が使うもの) には `pmemd` バイナリは含まれていません。**追加導入なしに走らせるなら `sander` 一択**です。
 
 ---
 
@@ -228,17 +230,17 @@ tail -f 03_Prod.out
 
 ```bash
 # プロセスが生きているか
-ps aux | grep -E "pmemd|sander" | grep -v grep
+ps aux | grep sander | grep -v grep
 
-# CPU を喰っているか
-top -p $(pgrep pmemd)
+# CPU を喰っているか (macOS の top はオプションが BSD 系)
+top -pid $(pgrep sander)
 ```
 
 ### 中断したい場合
 
 ```bash
 # プロセス番号を調べる
-pgrep pmemd
+pgrep sander
 
 # kill する
 kill <PID>
@@ -304,14 +306,23 @@ grep "Density" 03_Prod.out | awk '{print NR, $3}' | head -20
 
 ## 10. 所要時間の目安
 
-| マシン | 10 ns あたり |
-|--------|------------|
-| ノート PC (CPU、`pmemd` シリアル) | 公式値 **~13 時間** |
-| デスクトップ (`pmemd.MPI`、要商用 AMBER) | 数時間 |
-| GPU 機 (`pmemd.cuda`、要商用 AMBER) | 10〜30 分 |
-| HPC ノード | もっと速い |
+このチュートリアル系 (アラニンジペプチド + TIP3P 水、~2,800 原子) を `sander` シリアルで走らせた場合のおおよその目安:
 
-**最初は短縮版** (`nstlim=500000` = 1 ns、もしくは `nstlim=50000` = 100 ps) で動作確認してから本番を走らせるのが賢明。
+| 全長 | nstlim | Apple Silicon ノート PC (`sander` シリアル) |
+|------|--------|----------------------------------------|
+| 100 ps | 50,000 | **約 10〜20 分** (パイプライン動作確認用) |
+| 1 ns | 500,000 | **約 1〜2 時間** (軽い本番テスト) |
+| 10 ns | 5,000,000 | **約 12〜20 時間** (本チュートリアルの本番) |
+
+商用 AMBER の `pmemd` シリーズが使える場合は参考までに:
+
+| エンジン | 10 ns あたり |
+|--------|------------|
+| `pmemd` シリアル | `sander` の 2〜4 倍速 (= 数時間) |
+| `pmemd.MPI` (並列) | 1〜数時間 |
+| `pmemd.cuda` (GPU) | 10〜30 分 |
+
+**最初は短縮版** (`nstlim=500000` = 1 ns、もしくは `nstlim=50000` = 100 ps) で動作確認してから本番を走らせるのが賢明。10 ns の本番は `nohup sander ... &` で寝ている間に走らせるのが現実的。
 
 ---
 
@@ -331,7 +342,8 @@ grep "Density" 03_Prod.out | awk '{print NR, $3}' | head -20
 
 - **NPT アンサンブル**: 粒子数 N、圧力 P、温度 T を一定に保つ。詳細 [GLOSSARY § C](../../../GLOSSARY.md#アンサンブル-ensemble)
 - **Berendsen barostat**: 体積を一律スケールする圧力制御。詳細 [GLOSSARY](../../../GLOSSARY.md#バロスタット-barostat)
-- **pmemd**: AMBER の高速 MD エンジン。詳細 [GLOSSARY](../../../GLOSSARY.md#pmemd)
+- **sander**: AmberTools 同梱の MD エンジン。詳細 [GLOSSARY](../../../GLOSSARY.md#sander)
+- **pmemd**: AMBER の高速 MD エンジン (商用 AMBER 同梱)。詳細 [GLOSSARY](../../../GLOSSARY.md#pmemd)
 - **mdinfo**: MD 中の進捗情報ファイル。詳細 [GLOSSARY](../../../GLOSSARY.md#mdinfo)
 
 ---

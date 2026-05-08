@@ -34,6 +34,14 @@ summary.*
 *.pdf
 *.eps
 
+# --- Tutorial workspace/ — learner sandbox ------------------------------------
+# Each tutorial step has a workspace/ directory where the learner runs commands.
+# Anything created there (subdirectories, output files, edited inputs, notes)
+# is the learner's own work and should NOT be committed back to the tutorial
+# repo. Only the workspace/README.md scaffolding stays under version control.
+*/workspace/*
+!*/workspace/README.md
+
 # --- Nix ----------------------------------------------------------------------
 result
 result-*
